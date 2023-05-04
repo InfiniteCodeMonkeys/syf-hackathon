@@ -22,35 +22,13 @@ export const openAIRouter = router({
             },
             {
               role: "user",
-              content: `Please create a syllabus for an undergraduate course called '${input.title}' with a description, learning objectives, and for all 8 weeks of the course, please recommend readings and videos with links to amazon for the books and links to youtube for the videos.`,
+              content: `I am a 50 year old woman in Ohio. I have good credit and I like to watch ${input.show}. I am looking for a new ${input.thing}. Please show me a list of the best ${input.thing} for me based on the popular TV show ${input.show}.`,
             },
           ],
         });
-        console.log(response.data.choices);
+        console.log(response.data.choices[0]);
 
-        const secondResponse = await openai.createChatCompletion({
-          model: "gpt-3.5-turbo",
-          messages: [
-            {
-              role: "system",
-              content:
-                "The following is a conversation with an AI assistant. The assistant is very knowledgeable about the topic of the conversation. The assistant is helpful and very friendly.",
-            },
-            {
-              role: "user",
-              content: `Please put the following into a JSON object: ${response.data.choices[0]?.message?.content}`,
-            },
-          ],
-        });
-        console.log(secondResponse.data?.choices[0]?.message?.content);
-
-        const object = JSON.parse(
-          secondResponse.data?.choices[0]?.message?.content as string
-        );
-
-        console.log("object", object);
-
-        return secondResponse.data.choices;
+        return response.data.choices[0];
       } catch (error) {
         console.log(error);
         return error;

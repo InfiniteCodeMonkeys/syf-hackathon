@@ -71,12 +71,15 @@ const Home: NextPage = () => {
           <div className="flex justify-end">
             <button
               onClick={handleSubmit}
+              disabled={results.isLoading}
               className="alrounded-md mt-2 block rounded-md border-transparent bg-gradient-to-r from-orange-600 to-pink-500 px-4 py-3 text-center font-medium text-white shadow hover:bg-gray-700"
             >
               Get some results!
             </button>
           </div>
-          {openAIResponse ? <span>{openAIResponse}</span> : null}
+          {openAIResponse ? (
+            <span>{JSON.stringify(openAIResponse, null, 2)}</span>
+          ) : null}
         </div>
       </main>
     </>

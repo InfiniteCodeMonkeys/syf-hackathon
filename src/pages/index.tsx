@@ -8,12 +8,15 @@ const Home: NextPage = () => {
   const results = trpc.openAI.getResults.useMutation();
   const [show, setShow] = useState("Mad Men from AMC");
   const [thing, setThing] = useState("furniture and decorations");
+  const [loading, setLoading] = useState(false);
   const [openAIResponse, setOpenAIResponse] = useState([]);
 
   const handleSubmit = async () => {
+    setLoading(true);
     const response = (await results.mutateAsync({ show, thing })) as any;
     console.log(response);
-    setOpenAIResponse(JSON.parse(response?.message?.content));
+    setOpenAIResponse(response);
+    setLoading(false);
   };
 
   return (
@@ -66,13 +69,13 @@ const Home: NextPage = () => {
 
               <option value="Game of Thrones">Game of Thrones</option>
             </select>{" "}
-            from Synchrony Vendors.
+            from Synchrony vendors.
           </span>
 
           <div className="flex justify-end">
             <button
               onClick={handleSubmit}
-              disabled={results.isLoading}
+              disabled={loading}
               className="alrounded-md mt-2 block rounded-md border-transparent bg-gradient-to-r from-orange-600 to-pink-500 px-4 py-3 text-center font-medium text-white shadow hover:bg-gray-700"
             >
               Get some results!
@@ -89,13 +92,15 @@ const Home: NextPage = () => {
                   <a key={index} href={product.link} className="group">
                     <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg sm:aspect-h-3 sm:aspect-w-2">
                       <img
-                        src={product.imageSrc}
-                        alt={product.item}
+                        src={product.thumbnail}
+                        alt={product.title}
                         className="h-full w-full object-cover object-center group-hover:opacity-75"
                       />
                     </div>
                     <div className="mt-4 flex items-center justify-between text-base font-medium text-gray-900">
-                      <h3>{product.item}</h3>
+                      <h3>{product.title}</h3>
+                      {/* <h4>{product.source}</h4>
+                      <h4>{product.price}</h4> */}
                     </div>
                   </a>
                 ))}

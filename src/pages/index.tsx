@@ -78,7 +78,7 @@ const Home: NextPage = () => {
             </button>
           </div>
           {openAIResponse ? (
-            <span>{JSON.stringify(openAIResponse, null, 2)}</span>
+            <span>{JSON.stringify(JSON.parse(openAIResponse), null, 2)}</span>
           ) : null}
         </div>
       </main>

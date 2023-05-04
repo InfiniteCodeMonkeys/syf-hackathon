@@ -8,7 +8,7 @@ export const openAIRouter = router({
     .mutation(async ({ input }) => {
       try {
         const configuration = new Configuration({
-          organization: "org-2RXUwEw2a3Hf0KBwkJIRbzFm",
+          organization: "org-2ePBq9Cb8CW1m4oTvgGO2LwX",
           apiKey: process.env.OPENAI_API_KEY,
         });
         const openai = new OpenAIApi(configuration);
@@ -26,6 +26,7 @@ export const openAIRouter = router({
             },
           ],
         });
+        console.log(response);
         console.log(response.data.choices[0]);
 
         return response.data.choices[0];

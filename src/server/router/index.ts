@@ -1,12 +1,9 @@
-// src/server/router/index.ts
-import { createRouter } from "./context";
-import superjson from "superjson";
+import { router } from "../trpcConfig";
+import { openAIRouter } from "./openai";
 
-import { exampleRouter } from "./example";
-
-export const appRouter = createRouter()
-  .transformer(superjson)
-  .merge("example.", exampleRouter);
+export const appRouter = router({
+  openAI: openAIRouter,
+});
 
 // export type definition of API
 export type AppRouter = typeof appRouter;

@@ -1,6 +1,7 @@
 lockfileVersion: 5.3
 
 specifiers:
+  '@tailwindcss/aspect-ratio': ^0.4.2
   '@tanstack/react-query': ^4.29.5
   '@trpc/client': ^10.25.0
   '@trpc/next': ^10.25.0
@@ -29,6 +30,7 @@ specifiers:
   zod: ^3.18.0
 
 dependencies:
+  '@tailwindcss/aspect-ratio': 0.4.2_tailwindcss@3.3.2
   '@tanstack/react-query': 4.29.5_react-dom@18.2.0+react@18.2.0
   '@trpc/client': 10.25.0_@trpc+server@10.25.0
   '@trpc/next': 10.25.0_ba843af884674b4a8b1c9775052d24a8
@@ -299,6 +301,14 @@ packages:
     resolution: {integrity: sha512-rEUrBSGIoSFuYxwBYtlUFMlE2CwGhmW+w9355/5oduSw8e5h2+Tj4UrAGNNgP9915++wj5vkQo0UuOBqOAq4nw==}
     dependencies:
       tslib: 2.5.0
+    dev: false
+
+  /@tailwindcss/aspect-ratio/0.4.2_tailwindcss@3.3.2:
+    resolution: {integrity: sha512-8QPrypskfBa7QIMuKHg2TA7BqES6vhBrDLOv8Unb6FcFyd3TjKbc6lcmb9UPQHxfl24sXoJ41ux/H7qQQvfaSQ==}
+    peerDependencies:
+      tailwindcss: '>=2.0.0 || >=3.0.0 || >=3.0.0-alpha.1'
+    dependencies:
+      tailwindcss: 3.3.2
     dev: false
 
   /@tanstack/query-core/4.29.5:

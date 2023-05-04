@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import type { NextPage } from "next";
 import Head from "next/head";
 import { trpc } from "../utils/trpc";
@@ -7,12 +8,12 @@ const Home: NextPage = () => {
   const results = trpc.openAI.getResults.useMutation();
   const [show, setShow] = useState("Mad Men from AMC");
   const [thing, setThing] = useState("furniture and decorations");
-  const [openAIResponse, setOpenAIResponse] = useState("");
+  const [openAIResponse, setOpenAIResponse] = useState([]);
 
   const handleSubmit = async () => {
     const response = (await results.mutateAsync({ show, thing })) as any;
     console.log(response);
-    setOpenAIResponse(response?.message?.content);
+    setOpenAIResponse(JSON.parse(response?.message?.content));
   };
 
   return (
@@ -78,7 +79,28 @@ const Home: NextPage = () => {
             </button>
           </div>
           {openAIResponse ? (
-            <span>{JSON.stringify(JSON.parse(openAIResponse), null, 2)}</span>
+            <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+              <h2 id="products-heading" className="sr-only">
+                Products
+              </h2>
+
+              <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
+                {openAIResponse.map((product: any, index) => (
+                  <a key={index} href={product.link} className="group">
+                    <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg sm:aspect-h-3 sm:aspect-w-2">
+                      <img
+                        src={product.imageSrc}
+                        alt={product.item}
+                        className="h-full w-full object-cover object-center group-hover:opacity-75"
+                      />
+                    </div>
+                    <div className="mt-4 flex items-center justify-between text-base font-medium text-gray-900">
+                      <h3>{product.item}</h3>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </div>
           ) : null}
         </div>
       </main>

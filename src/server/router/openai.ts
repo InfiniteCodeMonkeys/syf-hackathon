@@ -22,7 +22,7 @@ export const openAIRouter = router({
             },
             {
               role: "user",
-              content: `I am a 50 year old woman in Chicago and I like to watch the show "${input.show}". I am looking to buy new ${input.thing}. Please list six ${input.thing} from the show "${input.show}" with links to stores where I can buy it in JSON format, just the raw JSON data, no text response. Do not add any text above or below your response.`,
+              content: `I am a 50 year old woman in Chicago and I like to watch the show "${input.show}". I am looking to buy new ${input.thing}. Please list six ${input.thing} from the show "${input.show}" with links to stores where I can buy it in JSON array of objects format, just the raw JSON data, no text response. There should only be four keys in each object: item, imageSrc, store, and link. Do not add any text above or below your response.`,
             },
           ],
         });

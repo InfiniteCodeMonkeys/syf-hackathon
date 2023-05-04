@@ -22,7 +22,7 @@ export const openAIRouter = router({
             },
             {
               role: "user",
-              content: `I am a 50 year old woman in Chicago and I like to watch ${input.show}. I am looking to buy new ${input.thing}. Please list ten ${input.thing} from the show ${input.show} as a shopping query.`,
+              content: `I am a 50 year old woman in Chicago and I like to watch the TV show "${input.show}". I am looking to buy new ${input.thing}. Please list ten ${input.thing} from the show "${input.show}" as a shopping query.`,
             },
           ],
         });

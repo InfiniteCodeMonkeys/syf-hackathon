@@ -5,12 +5,14 @@ import { useState } from "react";
 
 const Home: NextPage = () => {
   const results = trpc.openAI.getResults.useMutation();
-  const [show, setShow] = useState("");
-  const [thing, setThing] = useState("");
+  const [show, setShow] = useState("Mad Men from AMC");
+  const [thing, setThing] = useState("furniture and decorations");
+  const [openAIResponse, setOpenAIResponse] = useState("");
 
   const handleSubmit = async () => {
-    const response = await results.mutateAsync({ show, thing });
+    const response = (await results.mutateAsync({ show, thing })) as any;
     console.log(response);
+    setOpenAIResponse(response?.message?.content);
   };
 
   return (
@@ -47,7 +49,7 @@ const Home: NextPage = () => {
               value={show}
               onChange={(e) => setShow(e.currentTarget.value)}
             >
-              <option value="Mad Men">Mad Men</option>
+              <option value="Mad Men from AMC">Mad Men</option>
               <option value="Star Wars">Star Wars</option>
               <option value="Downtown Abbey">Downtown Abbey</option>
               <option value="Mamma Mia!">Mamma Mia!</option>
@@ -74,6 +76,7 @@ const Home: NextPage = () => {
               Get some results!
             </button>
           </div>
+          {openAIResponse ? <span>openAIResponse</span> : null}
         </div>
       </main>
     </>

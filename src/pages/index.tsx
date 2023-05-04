@@ -76,7 +76,7 @@ const Home: NextPage = () => {
               Get some results!
             </button>
           </div>
-          {openAIResponse ? <span>openAIResponse</span> : null}
+          {openAIResponse ? <span>{openAIResponse}</span> : null}
         </div>
       </main>
     </>

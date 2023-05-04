@@ -8,6 +8,7 @@ import { z } from "zod";
 export const serverSchema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]),
   OPENAI_API_KEY: z.string(),
+  SERPAPI_API_KEY: z.string(),
 });
 
 /**

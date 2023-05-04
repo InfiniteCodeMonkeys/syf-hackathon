@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import type { NextPage } from "next";
 import Head from "next/head";
 import { trpc } from "../utils/trpc";
@@ -5,12 +6,17 @@ import { useState } from "react";
 
 const Home: NextPage = () => {
   const results = trpc.openAI.getResults.useMutation();
-  const [show, setShow] = useState("");
-  const [thing, setThing] = useState("");
+  const [show, setShow] = useState("Mad Men from AMC");
+  const [thing, setThing] = useState("furniture and decorations");
+  const [loading, setLoading] = useState(false);
+  const [openAIResponse, setOpenAIResponse] = useState([]);
 
   const handleSubmit = async () => {
-    const response = await results.mutateAsync({ show, thing });
+    setLoading(true);
+    const response = (await results.mutateAsync({ show, thing })) as any;
     console.log(response);
+    setOpenAIResponse(response);
+    setLoading(false);
   };
 
   return (
@@ -47,7 +53,7 @@ const Home: NextPage = () => {
               value={show}
               onChange={(e) => setShow(e.currentTarget.value)}
             >
-              <option value="Mad Men">Mad Men</option>
+              <option value="Mad Men from AMC">Mad Men</option>
               <option value="Star Wars">Star Wars</option>
               <option value="Downtown Abbey">Downtown Abbey</option>
               <option value="Mamma Mia!">Mamma Mia!</option>
@@ -63,17 +69,44 @@ const Home: NextPage = () => {
 
               <option value="Game of Thrones">Game of Thrones</option>
             </select>{" "}
-            from Synchrony Vendors.
+            from Synchrony vendors.
           </span>
 
           <div className="flex justify-end">
             <button
               onClick={handleSubmit}
+              disabled={loading}
               className="alrounded-md mt-2 block rounded-md border-transparent bg-gradient-to-r from-orange-600 to-pink-500 px-4 py-3 text-center font-medium text-white shadow hover:bg-gray-700"
             >
               Get some results!
             </button>
           </div>
+          {openAIResponse ? (
+            <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+              <h2 id="products-heading" className="sr-only">
+                Products
+              </h2>
+
+              <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
+                {openAIResponse.map((product: any, index) => (
+                  <a key={index} href={product.link} className="group">
+                    <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg sm:aspect-h-3 sm:aspect-w-2">
+                      <img
+                        src={product.thumbnail}
+                        alt={product.title}
+                        className="h-full w-full object-cover object-center group-hover:opacity-75"
+                      />
+                    </div>
+                    <div className="mt-4 flex items-center justify-between text-base font-medium text-gray-900">
+                      <h3>{product.title}</h3>
+                      {/* <h4>{product.source}</h4>
+                      <h4>{product.price}</h4> */}
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </div>
+          ) : null}
         </div>
       </main>
     </>

@@ -9,6 +9,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tanstack/react-query": "^4.29.5",
     "@trpc/client": "^10.25.0",
     "@trpc/next": "^10.25.0",

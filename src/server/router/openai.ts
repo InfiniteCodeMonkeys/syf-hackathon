@@ -22,13 +22,40 @@ export const openAIRouter = router({
             },
             {
               role: "user",
-              content: `I am a 50 year old woman in Chicago and I like to watch ${input.show}. I am looking to buy new ${input.thing}. Please list ten ${input.thing} from the show ${input.show} as a shopping query.`,
+              content: `I am a 50 year old woman in Chicago and I like to watch the show "${input.show}". I am looking to buy new ${input.thing}. Please list six ${input.thing} from the show "${input.show}" with links to stores where I can buy it in JSON array of objects format, just the raw JSON data, no text response. There should only be four keys in each object: item, imageSrc, store, and link. The item should be very descriptive. Do not add any text above or below your response.`,
+            },
+            {
+              role: "user",
+              content: `I am a 50 year old woman in Chicago and I like to watch the show "${input.show}". I am looking to buy new ${input.thing}. Please list six ${input.thing} from the show "${input.show}" with links to stores where I can buy it in JSON array of objects format, just the raw JSON data, no text response. There should only be four keys in each object: item, imageSrc, store, and link. The item should be very descriptive. Do not add any text above or below your response.`,
             },
           ],
         });
-        console.log(response.data.choices[0]);
 
-        return response.data.choices[0];
+        const items = await JSON.parse(
+          response.data.choices[0]?.message?.content as string
+        );
+
+        console.log(items);
+
+        const formattedItemsArray: any[] = [];
+
+        const getResponses = async () => {
+          for (const item of items) {
+            const response = await fetch(
+              `https://serpapi.com/search?tbm=shop&engine=google&gl=us&hl=en&api_key=${process.env.SERPAPI_API_KEY}&q=${item.item}`
+            );
+            const data = await response.json();
+
+            for (let i = 0; i <= 10; i++) {
+              formattedItemsArray.push(data.shopping_results[i]);
+            }
+          }
+
+          console.log("formattedItemsArray", formattedItemsArray);
+        };
+
+        await getResponses();
+        return formattedItemsArray;
       } catch (error) {
         console.log(error);
         return error;

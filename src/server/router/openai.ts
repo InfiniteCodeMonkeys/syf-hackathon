@@ -22,20 +22,16 @@ export const openAIRouter = router({
             },
             {
               role: "user",
-              content: `I am a 50 year old woman in Chicago and I like to watch the show "${input.show}". I am looking to buy new ${input.thing}. Please list six ${input.thing} from the show "${input.show}" with links to stores where I can buy it in JSON array of objects format, just the raw JSON data, no text response. There should only be four keys in each object: item, imageSrc, store, and link. The item should be very descriptive. Do not add any text above or below your response.`,
-            },
-            {
-              role: "user",
-              content: `I am a 50 year old woman in Chicago and I like to watch the show "${input.show}". I am looking to buy new ${input.thing}. Please list six ${input.thing} from the show "${input.show}" with links to stores where I can buy it in JSON array of objects format, just the raw JSON data, no text response. There should only be four keys in each object: item, imageSrc, store, and link. The item should be very descriptive. Do not add any text above or below your response.`,
+              content: `I am a 50 year old woman in Chicago and I like to watch the show "${input.show}". I am looking to buy new ${input.thing}. Please list six ${input.thing} from the show "${input.show}" with links to stores where I can buy it, in JSON array of objects format, just the raw JSON data, no text response. There should only be one key in each object: item. The item should be very descriptive. Do not add any text above or below your response.`,
             },
           ],
         });
 
+        console.log(response);
+
         const items = await JSON.parse(
           response.data.choices[0]?.message?.content as string
         );
-
-        console.log(items);
 
         const formattedItemsArray: any[] = [];
 
@@ -44,9 +40,11 @@ export const openAIRouter = router({
             const response = await fetch(
               `https://serpapi.com/search?tbm=shop&engine=google&gl=us&hl=en&api_key=${process.env.SERPAPI_API_KEY}&q=${item.item}`
             );
+
+            console.log(response);
             const data = await response.json();
 
-            for (let i = 0; i <= 10; i++) {
+            for (let i = 0; i <= 5; i++) {
               formattedItemsArray.push(data.shopping_results[i]);
             }
           }

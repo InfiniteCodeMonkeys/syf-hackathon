@@ -32,7 +32,7 @@ const Home: NextPage = () => {
           SYF <span className="text-purple-300">Hack</span>athon
         </h1>
         <div className="mt-2 w-[78%]">
-          <div>
+          <div className="flex flex-col justify-center">
             <span className="text-lg text-gray-900 text-center">
               Hi Jane, try shopping for{" "}
               <select

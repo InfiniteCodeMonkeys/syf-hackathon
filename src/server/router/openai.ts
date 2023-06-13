@@ -1,40 +1,51 @@
 import { z } from "zod";
 import { publicProcedure, router } from "../trpcConfig";
-import { Configuration, OpenAIApi } from "openai";
+import { StructuredOutputParser } from "langchain/output_parsers";
+import { OpenAI } from "langchain/llms/openai";
+import { PromptTemplate } from "langchain/prompts";
 
 export const openAIRouter = router({
   getResults: publicProcedure
     .input(z.object({ thing: z.string(), show: z.string() }))
     .mutation(async ({ input }) => {
+      // We can use zod to define a schema for the output using the `fromZodSchema` method of `StructuredOutputParser`.
+      const parser = StructuredOutputParser.fromZodSchema(
+        z.array(
+          z.object({
+            item: z.string().describe("name of the item"),
+          })
+        )
+      );
+      const formatInstructions = parser.getFormatInstructions();
+
+      const prompt = new PromptTemplate({
+        template:
+          "Answer the users question as best as possible.\n{format_instructions}\n{question}",
+        inputVariables: ["question"],
+        partialVariables: {
+          format_instructions: formatInstructions,
+        },
+      });
+
+      const model = new OpenAI({ maxTokens: 2800 });
+
+      const questionInput = await prompt.format({
+        question: `I am a 50 year old woman in Chicago and I like to watch the show "${input.show}". I am looking to buy new ${input.thing}. Please list six ${input.thing} from the show "${input.show}" with links to stores where I can buy it, in JSON array of objects format, just the raw JSON data, no text response. There should only be one key in each object: item. The item should be very descriptive. Do not add any text above or below your response.`,
+      });
+      const response = await model.call(questionInput);
+
+      const startOfArray = response.indexOf("[");
+      const endOfArray = response.lastIndexOf("]");
+
+      const array = response.slice(startOfArray, endOfArray + 1);
+
+      console.log(array);
+
+      const items = JSON.parse(array);
+
+      const formattedItemsArray: any[] = [];
+
       try {
-        const configuration = new Configuration({
-          organization: "org-2RXUwEw2a3Hf0KBwkJIRbzFm",
-          apiKey: process.env.OPENAI_API_KEY,
-        });
-        const openai = new OpenAIApi(configuration);
-        const response = await openai.createChatCompletion({
-          model: "gpt-3.5-turbo",
-          messages: [
-            {
-              role: "system",
-              content:
-                "The following is a conversation with an AI assistant. The assistant is very knowledgeable about the topic of the conversation. The assistant is helpful and very friendly.",
-            },
-            {
-              role: "user",
-              content: `I am a 50 year old woman in Chicago and I like to watch the show "${input.show}". I am looking to buy new ${input.thing}. Please list six ${input.thing} from the show "${input.show}" with links to stores where I can buy it, in JSON array of objects format, just the raw JSON data, no text response. There should only be one key in each object: item. The item should be very descriptive. Do not add any text above or below your response.`,
-            },
-          ],
-        });
-
-        console.log(response);
-
-        const items = await JSON.parse(
-          response.data.choices[0]?.message?.content as string
-        );
-
-        const formattedItemsArray: any[] = [];
-
         const getResponses = async () => {
           for (const item of items) {
             const response = await fetch(

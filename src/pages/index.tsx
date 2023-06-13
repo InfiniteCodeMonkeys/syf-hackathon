@@ -33,7 +33,7 @@ const Home: NextPage = () => {
         </h1>
         <div className="mt-2 w-[78%]">
           <div>
-            <span className="text-lg text-gray-900">
+            <span className="text-lg text-gray-900 text-center">
               Hi Jane, try shopping for{" "}
               <select
                 name="thing"

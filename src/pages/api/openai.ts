@@ -52,12 +52,16 @@ const getResults = async (input: { thing: string; show: string }) => {
     return formattedItemsArray;
   } catch (error) {
     console.log(error);
-    return error;
+    return { error };
   }
 };
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const results = await getResults(req.body);
+
+  if (!results) {
+    return res.status(404).json({ message: "No results found" });
+  }
 
   return res.status(200).json(results);
 }

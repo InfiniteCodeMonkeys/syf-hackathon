@@ -1,9 +1,5 @@
 {
   "functions": {
-    "pages/api/openai.js": {
-      "memory": 3008,
-      "maxDuration": 300
-    },
     "pages/api/openai.ts": {
       "memory": 3008,
       "maxDuration": 300

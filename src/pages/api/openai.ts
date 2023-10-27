@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { Configuration, OpenAIApi } from "openai";
 
-const getResults = async (input: { thing: string; show: string }) => {
+const getResults = async (thing: string, show: string) => {
   try {
     const configuration = new Configuration({
       organization: "org-2RXUwEw2a3Hf0KBwkJIRbzFm",
@@ -9,7 +9,7 @@ const getResults = async (input: { thing: string; show: string }) => {
     });
     const openai = new OpenAIApi(configuration);
     const response = await openai.createChatCompletion({
-      model: "gpt-3.5-turbo",
+      model: "gpt-4",
       messages: [
         {
           role: "system",
@@ -18,16 +18,18 @@ const getResults = async (input: { thing: string; show: string }) => {
         },
         {
           role: "user",
-          content: `I am a 50 year old woman in Chicago and I like to watch the show "${input.show}". I am looking to buy new ${input.thing}. Please list six ${input.thing} from the show "${input.show}" with links to stores where I can buy it, in JSON array of objects format, just the raw JSON data, no text response. There should only be one key in each object: item. The item should be very descriptive. Do not add any text above or below your response.`,
+          content: `I am a big fan of the popular show: "${show}". I am looking to buy new ${thing}. Please list six search queries of ${thing} from the show "${show}", in JSON array of objects format, just the raw JSON data, no text response. There should only be one key in each object: item. The item should be very descriptive. Do not add any text above or below your response.`,
         },
       ],
     });
 
-    console.log(response);
+    console.log(response.data.choices[0]?.message?.content);
 
     const items = await JSON.parse(
       response.data.choices[0]?.message?.content as string
     );
+
+    console.log("items", items);
 
     const formattedItemsArray: any[] = [];
 
@@ -37,8 +39,8 @@ const getResults = async (input: { thing: string; show: string }) => {
           `https://serpapi.com/search?tbm=shop&engine=google&gl=us&hl=en&api_key=${process.env.SERPAPI_API_KEY}&q=${item.item}`
         );
 
-        console.log(response);
         const data = await response.json();
+        console.log("data", data);
 
         for (let j = 0; j <= 5; j++) {
           formattedItemsArray.push(data.shopping_results[j]);
@@ -57,7 +59,8 @@ const getResults = async (input: { thing: string; show: string }) => {
 };
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const results = await getResults(req.body);
+  const { thing, show } = JSON.parse(req.body);
+  const results = await getResults(thing, show);
 
   if (!results) {
     return res.status(404).json({ message: "No results found" });

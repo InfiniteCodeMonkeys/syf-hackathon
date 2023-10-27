@@ -4,12 +4,13 @@ import Head from "next/head";
 import { useState } from "react";
 
 const Home: NextPage = () => {
-  const [show, setShow] = useState("Mad Men from AMC");
-  const [thing, setThing] = useState("furniture and decorations");
+  const [show, setShow] = useState("Mad Men");
+  const [thing, setThing] = useState("furniture and interior decorations");
   const [loading, setLoading] = useState(false);
   const [openAIResponse, setOpenAIResponse] = useState([]);
 
   const handleSubmit = async () => {
+    console.log(show, thing);
     setLoading(true);
     const response = await fetch("/api/openai", {
       method: "POST",
@@ -45,7 +46,7 @@ const Home: NextPage = () => {
                 value={thing}
                 onChange={(e) => setThing(e.currentTarget.value)}
               >
-                <option value="furniture and decorations">
+                <option value="furniture and interior decorations">
                   furniture and decorations
                 </option>
                 <option value="clothes">clothes</option>
@@ -58,7 +59,7 @@ const Home: NextPage = () => {
                 value={show}
                 onChange={(e) => setShow(e.currentTarget.value)}
               >
-                <option value="Mad Men from AMC">Mad Men</option>
+                <option value="Mad Men">Mad Men</option>
                 <option value="Star Wars">Star Wars</option>
                 <option value="Downton Abbey">Downton Abbey</option>
                 <option value="Mamma Mia!">Mamma Mia!</option>
@@ -119,22 +120,28 @@ const Home: NextPage = () => {
               </h2>
 
               <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-                {openAIResponse.map((product: any, index) => (
-                  <a key={index} href={product.link} className="group">
-                    <div className="aspect-h-1/2 aspect-w-1  overflow-hidden rounded-lg sm:aspect-h-3 sm:aspect-w-2">
-                      <img
-                        src={product.thumbnail}
-                        alt={product.title}
-                        className="h-full w-full object-cover object-center group-hover:opacity-75"
-                      />
-                    </div>
-                    <div className="mt-4 flex items-center justify-between text-base font-medium text-gray-900">
-                      <h3>{product.title}</h3>
-                      {/* <h4>{product.source}</h4>
+                {openAIResponse.length === 0 ? (
+                  <div>
+                    <h4>We&apos;re sorry there was an issue</h4>
+                  </div>
+                ) : null}
+                {openAIResponse.length &&
+                  openAIResponse?.map((product: any, index) => (
+                    <a key={index} href={product.link} className="group">
+                      <div className="aspect-h-1/2 aspect-w-1  overflow-hidden rounded-lg sm:aspect-h-3 sm:aspect-w-2">
+                        <img
+                          src={product.thumbnail}
+                          alt={product.title}
+                          className="h-full w-full object-cover object-center group-hover:opacity-75"
+                        />
+                      </div>
+                      <div className="mt-4 flex items-center justify-between text-base font-medium text-gray-900">
+                        <h3>{product.title}</h3>
+                        {/* <h4>{product.source}</h4>
                       <h4>{product.price}</h4> */}
-                    </div>
-                  </a>
-                ))}
+                      </div>
+                    </a>
+                  ))}
               </div>
             </div>
           ) : null}

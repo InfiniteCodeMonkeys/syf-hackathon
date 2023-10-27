@@ -1,6 +1,10 @@
 {
   "functions": {
-    "pages/api/trpc/openAI.getResults": {
+    "pages/api/trpc/*.js": {
+      "memory": 3008,
+      "maxDuration": 300
+    },
+    "pages/api/trpc/*.ts": {
       "memory": 3008,
       "maxDuration": 300
     }

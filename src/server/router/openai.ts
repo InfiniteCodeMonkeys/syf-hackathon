@@ -36,9 +36,9 @@ export const openAIRouter = router({
         const formattedItemsArray: any[] = [];
 
         const getResponses = async () => {
-          for (let i = 0; i <= 8 || i <= items.length; i++) {
+          for (const item of items) {
             const response = await fetch(
-              `https://serpapi.com/search?tbm=shop&engine=google&gl=us&hl=en&api_key=${process.env.SERPAPI_API_KEY}&q=${items[i]?.item}`
+              `https://serpapi.com/search?tbm=shop&engine=google&gl=us&hl=en&api_key=${process.env.SERPAPI_API_KEY}&q=${item.item}`
             );
 
             console.log(response);

@@ -1,6 +1,6 @@
 {
   "functions": {
-    "api/trpc/*.js": {
+    "api/trpc/*.ts": {
       "memory": 3008,
       "maxDuration": 300
     }

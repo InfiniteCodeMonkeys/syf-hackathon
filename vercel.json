@@ -4,7 +4,7 @@
       "memory": 3008,
       "maxDuration": 300
     },
-    "pages/api/**/*.ts": {
+    "pages/api/trpc/openAI.getResults": {
       "memory": 3008,
       "maxDuration": 300
     }

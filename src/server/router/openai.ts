@@ -36,16 +36,16 @@ export const openAIRouter = router({
         const formattedItemsArray: any[] = [];
 
         const getResponses = async () => {
-          for (const item of items) {
+          for (let i = 0; i <= 8 || i <= items.length; i++) {
             const response = await fetch(
-              `https://serpapi.com/search?tbm=shop&engine=google&gl=us&hl=en&api_key=${process.env.SERPAPI_API_KEY}&q=${item.item}`
+              `https://serpapi.com/search?tbm=shop&engine=google&gl=us&hl=en&api_key=${process.env.SERPAPI_API_KEY}&q=${items[i]?.item}`
             );
 
             console.log(response);
             const data = await response.json();
 
-            for (let i = 0; i <= 5; i++) {
-              formattedItemsArray.push(data.shopping_results[i]);
+            for (let j = 0; j <= 5; j++) {
+              formattedItemsArray.push(data.shopping_results[j]);
             }
           }
 

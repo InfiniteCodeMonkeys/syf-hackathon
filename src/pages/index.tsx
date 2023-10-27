@@ -120,23 +120,24 @@ const Home: NextPage = () => {
               </h2>
 
               <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-                {openAIResponse.length &&
-                  openAIResponse?.map((product: any, index) => (
-                    <a key={index} href={product.link} className="group">
-                      <div className="aspect-h-1/2 aspect-w-1  overflow-hidden rounded-lg sm:aspect-h-3 sm:aspect-w-2">
-                        <img
-                          src={product.thumbnail}
-                          alt={product.title}
-                          className="h-full w-full object-cover object-center group-hover:opacity-75"
-                        />
-                      </div>
-                      <div className="mt-4 flex items-center justify-between text-base font-medium text-gray-900">
-                        <h3>{product.title}</h3>
-                        {/* <h4>{product.source}</h4>
+                {openAIResponse.length
+                  ? openAIResponse?.map((product: any, index) => (
+                      <a key={index} href={product.link} className="group">
+                        <div className="aspect-h-1/2 aspect-w-1  overflow-hidden rounded-lg sm:aspect-h-3 sm:aspect-w-2">
+                          <img
+                            src={product.thumbnail}
+                            alt={product.title}
+                            className="h-full w-full object-cover object-center group-hover:opacity-75"
+                          />
+                        </div>
+                        <div className="mt-4 flex items-center justify-between text-base font-medium text-gray-900">
+                          <h3>{product.title}</h3>
+                          {/* <h4>{product.source}</h4>
                       <h4>{product.price}</h4> */}
-                      </div>
-                    </a>
-                  ))}
+                        </div>
+                      </a>
+                    ))
+                  : null}
               </div>
             </div>
           ) : null}

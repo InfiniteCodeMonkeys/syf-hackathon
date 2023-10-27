@@ -56,8 +56,8 @@ const getResults = async (input: { thing: string; show: string }) => {
   }
 };
 
-function handler(req: NextApiRequest, res: NextApiResponse) {
-  const results = getResults(req.body);
+async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const results = await getResults(req.body);
 
   return res.status(200).json(results);
 }

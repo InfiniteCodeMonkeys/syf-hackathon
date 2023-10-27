@@ -1,11 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 import type { NextPage } from "next";
 import Head from "next/head";
-import { trpc } from "../utils/trpc";
 import { useState } from "react";
 
 const Home: NextPage = () => {
-  const results = trpc.openAI.getResults.useMutation();
   const [show, setShow] = useState("Mad Men from AMC");
   const [thing, setThing] = useState("furniture and decorations");
   const [loading, setLoading] = useState(false);
@@ -13,9 +11,15 @@ const Home: NextPage = () => {
 
   const handleSubmit = async () => {
     setLoading(true);
-    const response = (await results.mutateAsync({ show, thing })) as any;
+    const response = await fetch("/api/openai", {
+      method: "POST",
+      body: JSON.stringify({ show, thing }),
+    });
+
     console.log(response);
-    setOpenAIResponse(response);
+
+    const data = await response.json();
+    setOpenAIResponse(data);
     setLoading(false);
   };
 

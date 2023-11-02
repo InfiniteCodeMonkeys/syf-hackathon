@@ -34,7 +34,7 @@ const Home: NextPage = () => {
 
       <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
         <h1 className="text-5xl font-extrabold leading-normal text-gray-700 md:text-[5rem]">
-          span className="text-purple-300">Hack</span>athon
+          <span className="text-purple-300">Hack</span>athon
         </h1>
         <div className="mt-2 w-[78%]">
           <div>
